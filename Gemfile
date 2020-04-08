@@ -11,6 +11,8 @@ gem 'puma', '~> 4.1'
 gem 'rails', '~> 6.0.2', '>= 6.0.2.2'
 
 gem 'grape'
+gem 'grape-entity'
+gem 'oj'
 
 group :development, :test do
   gem 'brakeman', '~> 4.7.1', require: false
