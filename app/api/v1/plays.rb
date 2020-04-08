@@ -6,6 +6,11 @@ module V1
 
     resource :plays do
       desc 'API for creating plays'
+      params do
+        requires :title,      type: String, desc: 'Play title'
+        requires :starts_on,  type: Date, desc: 'Date of play premier'
+        requires :ends_on,    type: Date, desc: 'Date of last show'
+      end
       post '/create' do
         Rails.logger.info("You've just created a play!")
       end
@@ -17,7 +22,7 @@ module V1
 
       desc 'API for creating plays'
       get '/' do
-        Rails.logger.info("Here's a list of our plays!")
+        Play.pluck(:title, :starts_on, :ends_on)
       end
     end
   end
