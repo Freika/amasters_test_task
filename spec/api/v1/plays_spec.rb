@@ -13,16 +13,26 @@ describe V1::Plays, type: :request do
   end
 
   context 'when POST /api/v1/plays/create' do
-    let(:params) { build(:play).attributes.except('id', 'created_at', 'updated_at') }
+    let!(:params) { build(:play).attributes.except('id', 'created_at', 'updated_at') }
 
-    it 'returns 201 status' do
-      post '/api/v1/plays', params: params
+    context 'when success' do
+      it 'returns 201 status' do
+        post '/api/v1/plays', params: params
 
-      expect(response.status).to eq 201
+        expect(response.status).to eq 201
+      end
+
+      it 'creates a play' do
+        expect { post '/api/v1/plays', params: params }.to change(Play, :count).by(1)
+      end
     end
 
-    it 'creates a play' do
-      expect { post '/api/v1/plays', params: params }.to change(Play, :count).by(1)
+    context 'when failure' do
+      it 'returns no content status' do
+        post '/api/v1/plays', params: {}
+
+        expect(response.status).to eq 204
+      end
     end
   end
 
@@ -30,14 +40,24 @@ describe V1::Plays, type: :request do
     let!(:play)    { create(:play) }
     let!(:params)  { play.attributes.except('id', 'created_at', 'updated_at') }
 
-    it 'deletes play' do
-      expect { delete '/api/v1/plays/destroy' }.to change(Play, :count).by(-1)
+    context 'when success' do
+      it 'deletes play' do
+        expect { delete '/api/v1/plays/destroy' }.to change(Play, :count).by(-1)
+      end
+
+      it 'returns 204 status' do
+        delete '/api/v1/plays/destroy', params: params
+
+        expect(response.status).to eq 204
+      end
     end
 
-    it 'returns 204 status' do
-      delete '/api/v1/plays/destroy'
+    context 'when failure' do
+      it 'returns 204 status' do
+        delete '/api/v1/plays/destroy', params: {}
 
-      expect(response.status).to eq 204
+        expect(response.status).to eq 204
+      end
     end
   end
 end

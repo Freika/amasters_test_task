@@ -15,17 +15,16 @@ module V1
         params Entities::Play.documentation
       end
       post '/' do
-        Play.create(params)
+        result = PlayContainer[:create].call(params)
 
-        status 201
+        result.success? ? status(201) : status(:no_content)
       end
 
       desc 'API for creating plays'
       delete '/destroy' do
-        play = Play.find_by(params)
-        play.destroy
+        result = PlayContainer[:destroy].call(params)
 
-        status 204
+        result.success? ? status(204) : status(:no_content)
       end
     end
   end

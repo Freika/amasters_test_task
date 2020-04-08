@@ -38,3 +38,6 @@ group :test do
   gem 'simplecov'
   gem 'simplecov-lcov'
 end
+
+gem 'dry-container'
+gem 'dry-monads'
